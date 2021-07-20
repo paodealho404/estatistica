@@ -19,15 +19,15 @@ cores <- sample(c('#B7E2A5', '#836DAD', '#59F966', '#458FB2', '#D09622', '#44854
 categorias <- names(tabela.situacao.atual)
 
 barplot(tabela.situacao.atual, main="Situação atual dos pacientes",
-        col=cores,
+        col=topo.colors(8),
         names.arg = c(""),
-        ylim=c(0,200000),
+        ylim=c(0,160000),
         xlab="Situação atual",
         ylab="Números de pacientes",
         )
 legend("topleft", bty="n", 
         legend=categorias,
-        fill=cores)
+        fill=topo.colors(8))
 
 # Fim do gráfico da situação atual dos pacientes
 
@@ -48,38 +48,35 @@ barplot(tabela.pacientes.obitos.municipio,
 
 # Óbitos por sexo e idade
 breaks <- seq(0, 110, by=10)
-
-pacientes.masculino <- subset(pacientes.obitos, pacientes.obitos$sexo == "Masculino")
-paciente.masculino.idade <- table(cut(sort(pacientes.masculino$idade), breaks))
-
-pacientes.feminino <- subset(pacientes.obitos, pacientes.obitos$sexo == "Feminino")
-paciente.feminino.idade <- table(cut(sort(pacientes.feminino$idade), breaks))
-
-table.sexo.pacientes <- cbind(paciente.masculino.idade, paciente.feminino.idade)
-colnames(table.sexo.pacientes) <- c("Pacientes Homens", "Pacientes Mulheres")
+#cbind(Masculino = table(cut(subset(pacientes.obitos, sexo == "Masculino")$idade, breaks)))
+pacientes.obitos.idade <- cut(pacientes.obitos$idade, breaks)
+pacientes.sexo.idade <- table(pacientes.obitos$sexo, pacientes.obitos.idade)
 
 names <- c("0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100", "100-110")
 
-barplot(t(table.sexo.pacientes), beside=TRUE, las=2,
+barplot(pacientes.sexo.idade, beside=TRUE, las=2,
         main="Gráfico de óbitos separados por sexo e idade",
         ylab="Óbitos", names.arg=names,  
-        col=c("#00cc00", "#cc0000"), ylim=c(0, 800))
+        col=c("#cc0000", "#00cc00"), ylim=c(0, 800))
 
 legend("topleft", pch=15,col=c("#00cc00", "#cc0000"), 
-       legend=c("Sexo masculino", "Sexo feminino"), cex=1.25,
+       legend=c("Sexo Masculino", "Sexo Feminino"), cex=1.25,
        bty="n")
 
 # Fim do gráfico dos óbitos por sexo e idade
 
 # Histograma de óbitos por idade
+paleta <- colorRampPalette(c("white", "#ff0000"))
+
+labels <- as.character(table(cut(pacientes.obitos$idade, breaks)))
 
 hist(pacientes.obitos$idade, 
      main="Frequência de óbitos por idade", 
      ylab="Óbitos",
      xlab="Idade",
-     col=sample(cores),
+     col=paleta(11),
      ylim=c(0, 1500),
-     xaxp=c(0, 120,12)
+     xaxp=c(0, 120,12), labels=labels
      )
 
 # Fim gráfico de óbitos por idade
