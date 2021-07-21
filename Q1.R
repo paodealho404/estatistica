@@ -45,5 +45,9 @@ per50
 per80
 
 par(mfrow=c(1, 1))
+
+
 boxplot(x, main="Lista de números", ylab="Números", col=c("#ff3333"), border=c("#00001a"))
 boxplot(x, horizontal=TRUE, main="Lista de números", xlab="Números", col=c("#ff3333"), border=c("#00001a"))
+
+
